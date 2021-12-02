@@ -1,17 +1,10 @@
 package com.gastonmartin.desafio.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@AllArgsConstructor
+@Data
 public class AdditionResult {
     private double result;
-
-    public AdditionResult(double result) {
-        this.result = result;
-    }
-
-    public double getResult() {
-        return result;
-    }
-
-    public void setResult(double result) {
-        this.result = result;
-    }
 }
