@@ -15,5 +15,6 @@ spring:
     username: tenpo
     password: tenpo
 
-
-#management.endpoint.auditevents.enabled: true
+server:
+  error:
+    include-message: always

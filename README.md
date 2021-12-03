@@ -17,7 +17,7 @@ cd local-dev
 
 # Seguridad
 
-La seguridad se maneja con Spring Security, usando Bcrypt como PasswordEncoder y la implementacion JdbcDaoImpl 
+La seguridad se maneja con Spring Security, usando Bcrypt como PasswordEncoder y la implementacion JdbcUserDetailsManager 
 de UserDetailsService delegada en la base de datos Postgres
 
 Dado que el mecanismo withDefaultSchema() de AuthenticationManagerBuilder genera DDL invalido para Postgres, se 
