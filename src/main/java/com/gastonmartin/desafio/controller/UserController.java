@@ -3,12 +3,17 @@ package com.gastonmartin.desafio.controller;
 import com.gastonmartin.desafio.exception.InvalidPasswordException;
 import com.gastonmartin.desafio.exception.InvalidUsernameException;
 import com.gastonmartin.desafio.exception.UserAlreadyExistsException;
+import com.gastonmartin.desafio.model.LoginRequest;
+import com.gastonmartin.desafio.model.SignupResponse;
 import com.gastonmartin.desafio.model.UserCreationRequest;
-import com.gastonmartin.desafio.service.AuditService;
 import com.gastonmartin.desafio.service.UsersService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,14 +21,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import static java.lang.String.format;
 
 @Log
 @RestController
 public class UserController {
 
-    @Autowired
-    private AuditService auditService;
 
     @Autowired
     private UsersService usersService;
@@ -31,12 +37,11 @@ public class UserController {
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.OK)
     @Transactional(rollbackFor = Exception.class)
-    public String createUser(@RequestBody UserCreationRequest newUser) throws InvalidPasswordException, UserAlreadyExistsException, InvalidUsernameException {
+    public SignupResponse createUser(@RequestBody UserCreationRequest newUser) throws InvalidPasswordException, UserAlreadyExistsException, InvalidUsernameException {
         String username = newUser.getUsername();
         String password = newUser.getPassword();
 
         log.info(format("Registering user %s", username));
-        auditService.saveAudit("/signup");
         try {
             usersService.createUser(username, password);
         } catch (InvalidPasswordException e) {
@@ -46,6 +51,23 @@ public class UserController {
         } catch (UserAlreadyExistsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Already Exists", e);
         }
-        return format("User %s successfully created", username);
+        return new SignupResponse(username, "created");
+    }
+
+    @PostMapping(value="/login")
+    public String login(@RequestBody LoginRequest loginRequest){
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(usersService.loginUser(loginRequest.getUsername(), loginRequest.getPassword()));
+        SecurityContextHolder.setContext(context);
+        return "Logged in";
+    }
+
+    @PostMapping(value="/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "Logged out";
     }
 }

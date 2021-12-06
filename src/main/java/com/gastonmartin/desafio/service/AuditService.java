@@ -21,12 +21,16 @@ public class AuditService {
     Clock clock;
 
     @Transactional(rollbackFor = Exception.class)
-    public void saveAudit(String url){
-        repository.save(new Audit(null, url, ZonedDateTime.now(clock)));
+    public void saveAudit(String method, String url, String userId) {
+        repository.save(new Audit(null,
+                method,
+                userId,
+                url,
+                ZonedDateTime.now(clock)));
     }
 
     @Transactional(readOnly = true)
-    public Page<Audit> findAll(Pageable page){
+    public Page<Audit> findAll(Pageable page) {
         return repository.findAll(page);
     }
 }

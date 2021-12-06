@@ -5,6 +5,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class AdditionResult {
-    private double result;
+public class SignupResponse {
+    private String userId;
+    private String result;
 }
