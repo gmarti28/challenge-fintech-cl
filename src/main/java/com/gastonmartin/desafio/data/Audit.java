@@ -18,7 +18,8 @@ public class Audit {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+    private String method;
+    private String userId;
     private String url;
     private ZonedDateTime eventTime;
-
 }
