@@ -27,7 +27,7 @@ public class MathController {
     @ResponseStatus(HttpStatus.OK)
     public AdditionResult sumTwoNumbers(@RequestBody final AdditionRequest numbers) {
         log.info(format("Summing %f + %f", numbers.getLeft(), numbers.getRight()));
-        service.saveAudit("/math/sum");
+        //service.saveAudit("/math/sum");
         return new AdditionResult(numbers.getLeft() + numbers.getRight());
     }
 }

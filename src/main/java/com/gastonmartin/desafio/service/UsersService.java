@@ -5,6 +5,9 @@ import com.gastonmartin.desafio.exception.InvalidUsernameException;
 import com.gastonmartin.desafio.exception.UserAlreadyExistsException;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +26,9 @@ public class UsersService {
     JdbcUserDetailsManager jdbcUserDetailsManager;
 
     @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     public void createUser(@NonNull String username, @NonNull String password) throws UserAlreadyExistsException, InvalidUsernameException, InvalidPasswordException {
@@ -36,5 +42,10 @@ public class UsersService {
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
         );
         jdbcUserDetailsManager.createUser(user);
+    }
+
+    public Authentication loginUser(@NonNull String username, @NonNull String password){
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
+        return authenticationManager.authenticate(authRequest);
     }
 }
