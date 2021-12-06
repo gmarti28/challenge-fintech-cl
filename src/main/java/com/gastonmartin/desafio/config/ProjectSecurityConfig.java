@@ -32,7 +32,7 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
                 // o un Token contra Cross Site Request Forgery que impida impersonar al usuario sin su consentimiento
                 // De agregar un frontend habria que establecer una politica de CORS.
                 .csrf().disable()
-                .addFilterAfter(new AuditRequestsFilter(List.of("/math/add", "/login", "/logout", "/audit")), BasicAuthenticationFilter.class)
+                .addFilterAfter(new AuditRequestsFilter(List.of("/signup", "/math/add", "/login", "/logout", "/audit")), BasicAuthenticationFilter.class)
                 .authorizeRequests()
                 .mvcMatchers("/math/add").hasRole("USER")
                 .mvcMatchers("/audit").hasRole("USER")

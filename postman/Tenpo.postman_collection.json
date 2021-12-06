@@ -1,0 +1,544 @@
+{
+	"info": {
+		"_postman_id": "a7507fea-fe5b-415e-ba56-a43b3044326b",
+		"name": "Tenpo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. SIGNUP",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains userId\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.userId).to.not.be.null;",
+							"    pm.environment.set(\"user\", jsonData.userId);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const jar = pm.cookies.jar();",
+							"",
+							"jar.set(pm.request.url, { name: 'JSESSIONID', value: 'x', httpOnly: true }, function (error, cookie) {",
+							"  // error - <Error>",
+							"  // cookie - <PostmanCookie>",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"followRedirects": false
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{$randomUUID}}\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. LOGIN",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"followRedirects": false
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{user}}\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. SUMA",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"left\": 1, \"right\": 2}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/math/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"math",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. LOGOUT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"left\": 1, \"right\": 2}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. SUMA Unauthorized",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"left\": 1, \"right\": 2}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/math/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"math",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6. RE-LOGIN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"followRedirects": false
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{user}}\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7. Audit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Has content and is not empty\", function () {",
+							"    pm.expect(jsonData.content).to.not.be.null;",
+							"    pm.expect(jsonData.content.length).to.be.greaterThan(0);",
+							"});",
+							"",
+							"pm.test(\"Has size and is not zero\", function () {",
+							"    pm.expect(jsonData.size).to.not.be.null;",
+							"    pm.expect(jsonData.size).to.be.greaterThan(0);",
+							"   ",
+							"});",
+							"",
+							"pm.test(\"Has totalPages and is not zero\", function () {",
+							"    pm.expect(jsonData.totalPages).to.not.be.null;",
+							"    pm.expect(jsonData.totalPages).to.be.greaterThan(0);",
+							"   ",
+							"});",
+							"",
+							"pm.test(\"Has totalElements and is not zero\", function () {",
+							"    pm.expect(jsonData.totalElements).to.not.be.null;",
+							"    pm.expect(jsonData.totalElements).to.be.greaterThan(0);",
+							"   ",
+							"});",
+							"",
+							"var firstContent = jsonData.content[0]; ",
+							"",
+							"pm.test(\"First content has id\", function (){",
+							"    pm.expect(firstContent.id).is.not.NaN;",
+							"    pm.expect(firstContent.id).is.not.null;",
+							"    ",
+							"});",
+							"",
+							"pm.test(\"First content has method\", function (){",
+							"    pm.expect(firstContent.method).is.not.NaN;",
+							"    pm.expect(firstContent.method).is.not.null;",
+							"    pm.expect(firstContent.method).is.not.empty;",
+							"});",
+							"",
+							"pm.test(\"First content has userId\", function (){",
+							"    pm.expect(firstContent.userId).is.not.NaN;",
+							"    pm.expect(firstContent.userId).is.not.null;",
+							"});",
+							"pm.test(\"First content has url\", function (){",
+							"    pm.expect(firstContent.url).is.not.NaN;",
+							"    pm.expect(firstContent.url).is.not.null;",
+							"    pm.expect(firstContent.url).is.not.empty;",
+							"    ",
+							"});",
+							"pm.test(\"First content has eventTime\", function (){",
+							"    pm.expect(firstContent.eventTime).is.not.NaN;",
+							"    pm.expect(firstContent.eventTime).is.not.null;",
+							"    pm.expect(firstContent.url).is.not.empty;",
+							"});",
+							"",
+							"//  \"totalPages\": 1,",
+							"  //\"totalElements\": 10,//"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"followRedirects": false
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"user\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/audit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"audit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8. LOGOUT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jar = pm.cookies.jar();",
+							"",
+							"jar.clear(pm.request.url, function (error) {",
+							"  // error - <Error>",
+							"});",
+							"",
+							"jar.clear('http://localhost:8080', function (error) {",
+							"  // error - <Error>",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"left\": 1, \"right\": 2}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "password",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "user",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

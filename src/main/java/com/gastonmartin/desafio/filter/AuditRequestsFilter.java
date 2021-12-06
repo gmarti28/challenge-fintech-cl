@@ -54,8 +54,9 @@ public class AuditRequestsFilter extends OncePerRequestFilter {
                     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
                     if (auth != null) {
                         userId = auth.getName();
-                        auditService.saveAudit(method, uri, userId);
                     }
+                    auditService.saveAudit(method, uri, userId);
+                    break;
                 }
             }
         } catch (Exception e){

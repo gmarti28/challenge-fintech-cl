@@ -4,6 +4,7 @@ import com.gastonmartin.desafio.exception.InvalidPasswordException;
 import com.gastonmartin.desafio.exception.InvalidUsernameException;
 import com.gastonmartin.desafio.exception.UserAlreadyExistsException;
 import com.gastonmartin.desafio.model.LoginRequest;
+import com.gastonmartin.desafio.model.SignupResponse;
 import com.gastonmartin.desafio.model.UserCreationRequest;
 import com.gastonmartin.desafio.service.UsersService;
 import lombok.extern.java.Log;
@@ -36,7 +37,7 @@ public class UserController {
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.OK)
     @Transactional(rollbackFor = Exception.class)
-    public String createUser(@RequestBody UserCreationRequest newUser) throws InvalidPasswordException, UserAlreadyExistsException, InvalidUsernameException {
+    public SignupResponse createUser(@RequestBody UserCreationRequest newUser) throws InvalidPasswordException, UserAlreadyExistsException, InvalidUsernameException {
         String username = newUser.getUsername();
         String password = newUser.getPassword();
 
@@ -50,7 +51,7 @@ public class UserController {
         } catch (UserAlreadyExistsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Already Exists", e);
         }
-        return format("User %s successfully created", username);
+        return new SignupResponse(username, "created");
     }
 
     @PostMapping(value="/login")

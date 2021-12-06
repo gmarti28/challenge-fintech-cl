@@ -1,7 +1,7 @@
 package com.gastonmartin.desafio.controller;
 
 import com.gastonmartin.desafio.model.AdditionRequest;
-import com.gastonmartin.desafio.model.AdditionResult;
+import com.gastonmartin.desafio.model.AdditionResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ public class MathController {
 
     @PostMapping("/math/add")
     @ResponseStatus(HttpStatus.OK)
-    public AdditionResult sumTwoNumbers(@RequestBody final AdditionRequest numbers) {
+    public AdditionResponse sumTwoNumbers(@RequestBody final AdditionRequest numbers) {
         log.info(format("Adding %f to %f", numbers.getLeft(), numbers.getRight()));
-        return new AdditionResult(numbers.getLeft() + numbers.getRight());
+        return new AdditionResponse(numbers.getLeft() + numbers.getRight());
     }
 }
