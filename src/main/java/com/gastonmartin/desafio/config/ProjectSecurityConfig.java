@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -27,11 +28,19 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
         // todo: Restringir los endpoints para que por default se requiera authenticacion si no estan listados.
 
         http
-                // La configuracion se genera sin CORS ni CSRF porque no fue mencionado en la consigna.
+                // La configuracion se genera sin CORS porque no fue mencionado en la consigna.
                 // En produccion para acceder a este backend se recomienda implementar un token JWT
-                // o un Token contra Cross Site Request Forgery que impida impersonar al usuario sin su consentimiento
                 // De agregar un frontend habria que establecer una politica de CORS.
-                .csrf().disable()
+                .csrf().csrfTokenRepository(getCookieCsrfTokenRepository())
+                .ignoringAntMatchers("/login")
+                .ignoringAntMatchers("/logout")
+                .ignoringAntMatchers("/signup")
+                .ignoringAntMatchers("/swagger-ui/**")
+                .ignoringAntMatchers("/swagger-ui.html")
+                .ignoringAntMatchers("/error")
+                .ignoringAntMatchers("/")
+                .ignoringAntMatchers("/v3/api-docs/**")
+                .and()
                 .addFilterAfter(new AuditRequestsFilter(List.of("/signup", "/math/add", "/login", "/logout", "/audit")), BasicAuthenticationFilter.class)
                 .authorizeRequests()
                 .mvcMatchers("/math/add").hasRole("USER")
@@ -82,5 +91,11 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    public CookieCsrfTokenRepository getCookieCsrfTokenRepository(){
+        CookieCsrfTokenRepository repository = new CookieCsrfTokenRepository();
+        repository.setCookieHttpOnly(true);
+        return repository;
     }
 }

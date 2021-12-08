@@ -97,6 +97,8 @@
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
+							"var xsrfToken = pm.cookies.get(\"XSRF-TOKEN\");",
+							"pm.environment.set(\"xsrfToken\",xsrfToken);",
 							""
 						],
 						"type": "text/javascript"
@@ -170,6 +172,11 @@
 					{
 						"key": "Content-Type",
 						"value": "application/json"
+					},
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{xsrfToken}}",
+						"type": "text"
 					}
 				],
 				"body": {
@@ -221,10 +228,6 @@
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"left\": 1, \"right\": 2}"
-				},
 				"url": {
 					"raw": "http://localhost:8080/logout",
 					"protocol": "http",
@@ -248,6 +251,60 @@
 						"exec": [
 							"pm.test(\"Status code is 401\", function () {",
 							"    pm.response.to.have.status(401);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{xsrfToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"left\": 1, \"right\": 2}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/math/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"math",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. SUMA Forbiden",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 403 because header X-XSRF-TOKEN is missing\", function () {",
+							"    pm.response.to.have.status(403);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -426,6 +483,11 @@
 					{
 						"key": "accept",
 						"value": "*/*"
+					},
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{xsrfToken}}",
+						"type": "text"
 					}
 				],
 				"body": {
