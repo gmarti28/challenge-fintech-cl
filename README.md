@@ -98,8 +98,9 @@ cookies guardadas en el navegador. El mecanismo estándar de protección consist
 asociado a la sesión del usuario, configurarlo como una cookie httpOnly (no legible desde ningún script en el cliente)
 que debe ser enviado junto con los request subsiguientes en forma de Cookie o Header para que el backend acepte los requests. 
 En Spring Security se implementa muy facilmente, pero dificulta las pruebas desde Swagger (no asi con Postman) 
----
-En la consigna del challenge no se pide la adopción de medidas de protección contra CSRF, pero de ser necesarias puedo
+
+
+En la consigna del _challenge_ no se pide la adopción de medidas de protección contra CSRF, pero de ser necesarias puedo
 agregarlas si me lo indican. 
 
 CORS - Cross Origin Resource Sharing
