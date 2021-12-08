@@ -20,3 +20,11 @@ services:
     volumes:
         - ./db:/db
     command: --username=tenpo --password=tenpo --url=jdbc:postgresql://postgres/desafio --changeLogFile=changelog.xml update
+
+  application:
+    build: ../
+    container_name: application
+    ports:
+      - 8080:8080
+    depends_on:
+      - liquibase-update
